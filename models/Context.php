@@ -300,7 +300,7 @@ class Context extends Component
      */
     protected function handlePropertyFeature($class)
     {
-        if (!$this->isSubclassOf($class, 'yii\base\Object')) {
+        if (!$this->isSubclassOfYii($class)) {
             return;
         }
         foreach ($class->getPublicMethods() as $name => $method) {
@@ -402,17 +402,14 @@ class Context extends Component
      * @param ClassDoc|string $classB
      * @return boolean
      */
-    protected function isSubclassOf($classA, $classB)
+    protected function isSubclassOfYii($classA)
     {
-        if (is_object($classB)) {
-            $classB = $classB->name;
-        }
-        if ($classA->name == $classB) {
+        if (strncmp($classA->name, 'yii\\', 4)) {
             return true;
         }
         while ($classA->parentClass !== null && isset($this->classes[$classA->parentClass])) {
             $classA = $this->classes[$classA->parentClass];
-            if ($classA->name == $classB) {
+            if (strncmp($classA->name, 'yii\\', 4)) {
                 return true;
             }
         }
